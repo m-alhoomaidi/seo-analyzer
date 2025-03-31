@@ -32,3 +32,25 @@
     @apply bg-gradient-to-br from-primary/80 to-cyan-500;
   }
 }
+
+/* Swiper styles */
+.tab-swiper {
+  @apply w-full;
+}
+
+.tab-swiper .swiper-slide {
+  @apply w-auto;
+}
+
+.swiper {
+  @apply overflow-visible;
+}
+
+/* Pre and code formatting for mobile */
+pre {
+  @apply whitespace-pre-wrap break-words max-w-full;
+}
+
+code {
+  @apply break-words;
+}

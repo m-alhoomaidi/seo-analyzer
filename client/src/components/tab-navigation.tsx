@@ -1,4 +1,7 @@
 import { cn } from "@/lib/utils";
+import { useEffect, useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import 'swiper/css';
 
 type Tab = "overview" | "meta-tags" | "social-preview" | "recommendations";
 
@@ -19,16 +22,32 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
     { id: "social-preview", label: "Social Preview" },
     { id: "recommendations", label: "Recommendations" }
   ];
+  
+  const swiperRef = useRef<any>(null);
+  const activeIndex = tabs.findIndex(tab => tab.id === activeTab);
+  
+  // Update Swiper when active tab changes
+  useEffect(() => {
+    if (swiperRef.current && swiperRef.current.swiper) {
+      swiperRef.current.swiper.slideTo(activeIndex);
+    }
+  }, [activeTab, activeIndex]);
 
   return (
-    <div className="border-b border-gray-200">
-      <nav className="-mb-px flex overflow-x-auto scrollbar-hide" aria-label="Tabs">
-        <div className="flex min-w-full">
-          {tabs.map((tab) => (
+    <div className="border-b border-gray-200 relative">
+      <Swiper
+        ref={swiperRef}
+        slidesPerView="auto"
+        spaceBetween={0}
+        initialSlide={activeIndex}
+        centerInsufficientSlides={true}
+        className="tab-swiper"
+      >
+        {tabs.map((tab) => (
+          <SwiperSlide key={tab.id} className="w-auto">
             <button
-              key={tab.id}
               className={cn(
-                "whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex-shrink-0 transition-all duration-200",
+                "whitespace-nowrap py-4 px-5 border-b-2 font-medium text-sm transition-all duration-200",
                 activeTab === tab.id
                   ? "border-primary text-primary"
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
@@ -38,9 +57,9 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
             >
               {tab.label}
             </button>
-          ))}
-        </div>
-      </nav>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }
