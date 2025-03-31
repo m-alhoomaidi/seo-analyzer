@@ -42,8 +42,10 @@ export default function Home() {
         <UrlInputForm onSubmit={handleAnalyze} isLoading={isAnalyzing} />
 
         {isAnalyzing ? (
-          <div className="flex justify-center items-center p-12">
+          <div className="flex flex-col justify-center items-center p-12 space-y-4">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-primary"></div>
+            <p className="text-gray-600 animate-pulse">Analyzing website content... This may take a moment</p>
+            <p className="text-xs text-gray-500">Fetching data through CORS proxy</p>
           </div>
         ) : seoResult ? (
           <SeoResults result={seoResult} />

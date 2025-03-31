@@ -13,15 +13,64 @@ export async function analyzeUrl(urlInput: string): Promise<SeoAnalysisResult> {
   try {
     const url = ensureProtocol(urlInput);
     
-    // For GitHub Pages deployment, we use a CORS proxy to fetch HTML
-    const corsProxyUrl = 'https://corsproxy.io/?';
-    const response = await fetch(corsProxyUrl + encodeURIComponent(url));
+    // Try multiple CORS proxies in case one fails
+    const corsProxies = [
+      'https://api.allorigins.win/raw?url=',
+      'https://corsproxy.io/?',
+      'https://cors.eu.org/',
+      'https://cors-proxy.htmldriven.com/?url=',
+      'https://cors-anywhere.herokuapp.com/'
+    ];
     
-    if (!response.ok) {
-      throw new Error(`Failed to fetch URL: ${response.status} ${response.statusText}`);
+    let html = '';
+    let success = false;
+    let lastError: Error | null = null;
+    
+    // Try each proxy until one works
+    for (const proxy of corsProxies) {
+      try {
+        const proxyUrl = proxy + encodeURIComponent(url);
+        const response = await fetch(proxyUrl);
+        
+        if (response.ok) {
+          const responseText = await response.text();
+          
+          // Handle different proxy response formats
+          if (proxy === 'https://api.allorigins.win/raw?url=') {
+            // allorigins returns raw HTML directly
+            html = responseText;
+          } else if (proxy === 'https://cors-proxy.htmldriven.com/?url=') {
+            // htmldriven returns JSON with HTML in a 'content' property
+            try {
+              const jsonResponse = JSON.parse(responseText);
+              if (jsonResponse.content) {
+                html = jsonResponse.content;
+              } else {
+                continue; // Invalid response format
+              }
+            } catch (e) {
+              // If not valid JSON, try using the response as is
+              html = responseText;
+            }
+          } else {
+            // Default case - assume raw HTML
+            html = responseText;
+          }
+          
+          success = true;
+          console.log(`Successfully fetched with proxy: ${proxy}`);
+          break;
+        }
+      } catch (err) {
+        lastError = err instanceof Error ? err : new Error('Unknown fetch error');
+        console.warn(`Proxy ${proxy} failed:`, err);
+        // Continue to next proxy
+      }
     }
     
-    const html = await response.text();
+    if (!success) {
+      throw new Error(lastError?.message || 'All CORS proxies failed to fetch the URL');
+    }
     
     // Create a DOM parser to parse the HTML
     const parser = new DOMParser();
@@ -43,11 +92,23 @@ export async function analyzeUrl(urlInput: string): Promise<SeoAnalysisResult> {
     const title = doc.querySelector('title')?.textContent || '';
     metaTags['title'] = title;
     
+    // Get canonical URL
+    const canonical = doc.querySelector('link[rel="canonical"]')?.getAttribute('href') || '';
+    if (canonical) {
+      metaTags['canonical'] = canonical;
+    }
+    
+    // Get favicon
+    const favicon = doc.querySelector('link[rel="icon"], link[rel="shortcut icon"]')?.getAttribute('href') || '';
+    if (favicon) {
+      metaTags['favicon'] = favicon.startsWith('http') ? favicon : new URL(favicon, url).href;
+    }
+    
     // Analyze the meta tags
     return analyzeMetaTags(metaTags, url);
   } catch (error) {
     console.error('Error analyzing URL:', error);
-    throw error;
+    throw new Error(error instanceof Error ? error.message : 'Unknown error analyzing URL');
   }
 }
 
