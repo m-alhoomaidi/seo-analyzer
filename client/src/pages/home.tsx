@@ -34,16 +34,20 @@ export default function Home() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-2">SEO Tag Analyzer</h1>
-        <p className="text-lg text-gray-600">Analyze and validate SEO meta tags for any website</p>
+      <header className="mb-8 text-center">
+        <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-3 tracking-tight">
+          <span className="text-gradient">SEO Tag Analyzer</span>
+        </h1>
+        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          Analyze and validate SEO meta tags for any website to improve your search engine visibility
+        </p>
       </header>
 
       <UrlInputForm onSubmit={handleAnalyze} isLoading={analyzeMutation.isPending} />
 
       {analyzeMutation.isPending ? (
         <div className="flex justify-center items-center p-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-primary"></div>
         </div>
       ) : seoResult ? (
         <SeoResults result={seoResult} />

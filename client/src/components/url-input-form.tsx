@@ -46,11 +46,11 @@ export function UrlInputForm({ onSubmit, isLoading }: UrlInputFormProps) {
   };
 
   return (
-    <Card className="mb-8">
+    <Card className="mb-8 shadow-lg border-0">
       <CardContent className="pt-6">
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
           <div className="flex-grow">
-            <Label htmlFor="url-input" className="block text-sm font-medium text-gray-700 mb-1">
+            <Label htmlFor="url-input" className="block text-sm font-semibold text-gray-800 mb-1">
               Enter Website URL
             </Label>
             <div className="mt-1 flex rounded-md shadow-sm">
@@ -60,20 +60,20 @@ export function UrlInputForm({ onSubmit, isLoading }: UrlInputFormProps) {
               <Input
                 id="url-input"
                 name="url"
-                className="flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
+                className="flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300 focus:ring-primary focus:border-primary"
                 placeholder="example.com"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 disabled={isLoading}
               />
             </div>
-            {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
+            {error && <p className="mt-1 text-xs text-red-500 font-medium">{error}</p>}
             <p className="mt-1 text-xs text-gray-500">No need to add http:// or https://</p>
           </div>
-          <div className="flex items-end">
+          <div className="flex items-end sm:self-end mt-2 sm:mt-0">
             <Button 
               type="submit" 
-              className="bg-primary hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition duration-150 ease-in-out flex items-center"
+              className="w-full sm:w-auto bg-gradient-to-r from-primary to-blue-600 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2.5 px-6 rounded-md transition-all duration-200 flex items-center shadow-md hover:shadow-lg"
               disabled={isLoading}
             >
               <span>Analyze</span>
