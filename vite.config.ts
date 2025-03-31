@@ -10,7 +10,7 @@ const __dirname = dirname(__filename);
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/SeoTagInspector/', // This should match your GitHub repository name
+  base: '/seo-analyzer/', // Updated to match your repository name
   plugins: [
     react(),
     runtimeErrorOverlay(),
