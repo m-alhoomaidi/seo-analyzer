@@ -8,7 +8,9 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// https://vitejs.dev/config/
 export default defineConfig({
+  base: '/SeoTagInspector/', // This should match your GitHub repository name
   plugins: [
     react(),
     runtimeErrorOverlay(),
@@ -33,5 +35,13 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'wouter'],
+        },
+      },
+    },
   },
 });

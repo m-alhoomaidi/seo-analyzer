@@ -13,12 +13,12 @@ export async function analyzeUrl(urlInput: string): Promise<SeoAnalysisResult> {
   try {
     const url = ensureProtocol(urlInput);
     
-    // Try multiple CORS proxies in case one fails
+    // Updated list of CORS proxies with better reliability
     const corsProxies = [
       'https://api.allorigins.win/raw?url=',
       'https://corsproxy.io/?',
       'https://cors.eu.org/',
-      'https://cors-proxy.htmldriven.com/?url=',
+      'https://api.codetabs.com/v1/proxy?quest=',
       'https://cors-anywhere.herokuapp.com/'
     ];
     
@@ -30,46 +30,50 @@ export async function analyzeUrl(urlInput: string): Promise<SeoAnalysisResult> {
     for (const proxy of corsProxies) {
       try {
         const proxyUrl = proxy + encodeURIComponent(url);
-        const response = await fetch(proxyUrl);
+        const response = await fetch(proxyUrl, {
+          headers: {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'User-Agent': 'Mozilla/5.0 (compatible; SeoTagInspector/1.0; +https://github.com/yourusername/SeoTagInspector)'
+          }
+        });
         
         if (response.ok) {
           const responseText = await response.text();
           
           // Handle different proxy response formats
           if (proxy === 'https://api.allorigins.win/raw?url=') {
-            // allorigins returns raw HTML directly
             html = responseText;
           } else if (proxy === 'https://cors-proxy.htmldriven.com/?url=') {
-            // htmldriven returns JSON with HTML in a 'content' property
             try {
               const jsonResponse = JSON.parse(responseText);
-              if (jsonResponse.content) {
-                html = jsonResponse.content;
-              } else {
-                continue; // Invalid response format
-              }
+              html = jsonResponse.content || responseText;
             } catch (e) {
-              // If not valid JSON, try using the response as is
               html = responseText;
             }
           } else {
-            // Default case - assume raw HTML
             html = responseText;
           }
           
-          success = true;
-          console.log(`Successfully fetched with proxy: ${proxy}`);
-          break;
+          // Basic validation of HTML content
+          if (html.includes('<html') && html.includes('</html>')) {
+            success = true;
+            console.log(`Successfully fetched with proxy: ${proxy}`);
+            break;
+          } else {
+            throw new Error('Invalid HTML content received');
+          }
         }
       } catch (err) {
         lastError = err instanceof Error ? err : new Error('Unknown fetch error');
         console.warn(`Proxy ${proxy} failed:`, err);
-        // Continue to next proxy
       }
     }
     
     if (!success) {
-      throw new Error(lastError?.message || 'All CORS proxies failed to fetch the URL');
+      throw new Error(
+        lastError?.message || 
+        'Unable to fetch the website. This might be due to CORS restrictions or the website being unavailable.'
+      );
     }
     
     // Create a DOM parser to parse the HTML

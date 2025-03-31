@@ -70,7 +70,7 @@ export function UrlInputForm({ onSubmit, isLoading }: UrlInputFormProps) {
             {error && <p className="mt-1 text-xs text-red-500 font-medium">{error}</p>}
             <p className="mt-1 text-xs text-gray-500">No need to add http:// or https://</p>
           </div>
-          <div className="flex sm:flex-col justify-end sm:pb-[1px]">
+          <div className="flex sm:flex-col justify-center sm:pb-[1px]">
             <Button 
               type="submit" 
               className="w-full sm:w-auto bg-gradient-to-r from-primary to-blue-600 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2.5 px-6 rounded-md transition-all duration-200 flex items-center shadow-md hover:shadow-lg h-[38px]"
