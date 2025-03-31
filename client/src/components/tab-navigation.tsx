@@ -34,16 +34,19 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
   }, [activeTab, activeIndex]);
 
   return (
-    <div className="border-b border-gray-200 relative overflow-hidden">
+    <div className="border-b border-gray-200 relative">
       <div className="container mx-auto px-3 md:px-6">
         <Swiper
           ref={swiperRef}
           slidesPerView="auto"
           spaceBetween={0}
           initialSlide={activeIndex}
-          centerInsufficientSlides={true}
           className="tab-swiper"
-          freeMode={true}
+          freeMode={{
+            enabled: true,
+            momentum: true
+          }}
+          grabCursor={true}
         >
           {tabs.map((tab) => (
             <SwiperSlide key={tab.id} className="w-auto">

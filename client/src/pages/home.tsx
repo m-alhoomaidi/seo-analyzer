@@ -2,34 +2,29 @@ import { useState } from "react";
 import { UrlInputForm } from "@/components/url-input-form";
 import { SeoResults } from "@/components/seo-results";
 import { EmptyState } from "@/components/empty-state";
-import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { type SeoAnalysisResult } from "@shared/schema";
+import { analyzeUrl } from "@/utils/seo-analyzer";
 
 export default function Home() {
   const [seoResult, setSeoResult] = useState<SeoAnalysisResult | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const { toast } = useToast();
 
-  const analyzeMutation = useMutation({
-    mutationFn: async (url: string) => {
-      const response = await apiRequest("POST", "/api/analyze", { url });
-      return response.json() as Promise<SeoAnalysisResult>;
-    },
-    onSuccess: (data) => {
-      setSeoResult(data);
-    },
-    onError: (error) => {
+  const handleAnalyze = async (url: string) => {
+    try {
+      setIsAnalyzing(true);
+      const result = await analyzeUrl(url);
+      setSeoResult(result);
+    } catch (error) {
       toast({
         title: "Error analyzing website",
         description: error instanceof Error ? error.message : "Unknown error occurred",
         variant: "destructive",
       });
+    } finally {
+      setIsAnalyzing(false);
     }
-  });
-
-  const handleAnalyze = (url: string) => {
-    analyzeMutation.mutate(url);
   };
 
   return (
@@ -44,9 +39,9 @@ export default function Home() {
           </p>
         </header>
 
-        <UrlInputForm onSubmit={handleAnalyze} isLoading={analyzeMutation.isPending} />
+        <UrlInputForm onSubmit={handleAnalyze} isLoading={isAnalyzing} />
 
-        {analyzeMutation.isPending ? (
+        {isAnalyzing ? (
           <div className="flex justify-center items-center p-12">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-primary"></div>
           </div>
