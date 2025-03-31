@@ -20,13 +20,15 @@ export function SeoResults({ result }: SeoResultsProps) {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-full overflow-hidden">
       <TabNavigation activeTab={activeTab} onTabChange={handleTabChange} />
       
-      {activeTab === "overview" && <OverviewTab result={result} />}
-      {activeTab === "meta-tags" && <MetaTagsTab tags={result.tags} />}
-      {activeTab === "social-preview" && <SocialPreviewTab socialPreviews={result.socialPreviews} url={result.url} />}
-      {activeTab === "recommendations" && <RecommendationsTab recommendations={result.recommendations} />}
+      <div className="container mx-auto px-3 md:px-6">
+        {activeTab === "overview" && <OverviewTab result={result} />}
+        {activeTab === "meta-tags" && <MetaTagsTab tags={result.tags} />}
+        {activeTab === "social-preview" && <SocialPreviewTab socialPreviews={result.socialPreviews} url={result.url} />}
+        {activeTab === "recommendations" && <RecommendationsTab recommendations={result.recommendations} />}
+      </div>
     </div>
   );
 }

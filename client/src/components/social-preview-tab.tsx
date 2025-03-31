@@ -20,16 +20,18 @@ export function SocialPreviewTab({ socialPreviews, url }: SocialPreviewTabProps)
   const domain = getDomain(url);
   
   return (
-    <Card>
+    <Card className="shadow-md border-0">
       <CardContent className="pt-6">
-        <h2 className="text-xl font-semibold mb-4">Social Media Previews</h2>
+        <h2 className="text-2xl font-bold mb-5">
+          <span className="text-gradient">Social Media Previews</span>
+        </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Facebook Preview */}
           <div>
-            <h3 className="text-lg font-medium mb-3">Facebook Preview</h3>
+            <h3 className="text-lg font-semibold mb-3">Facebook Preview</h3>
             <div className="border border-gray-300 rounded-lg overflow-hidden shadow-sm">
-              <div className="h-52 bg-gray-200 flex items-center justify-center">
+              <div className="h-48 bg-gray-200 flex items-center justify-center">
                 {socialPreviews.facebook.image ? (
                   <img 
                     src={socialPreviews.facebook.image}
@@ -44,11 +46,11 @@ export function SocialPreviewTab({ socialPreviews, url }: SocialPreviewTabProps)
                 )}
               </div>
               <div className="p-3 bg-white">
-                <div className="text-xs text-gray-500 mb-1">{domain}</div>
-                <div className="font-medium text-gray-900 mb-1 line-clamp-2">
+                <div className="text-xs text-gray-500 mb-1 break-words">{domain}</div>
+                <div className="font-medium text-gray-900 mb-1 line-clamp-2 break-words">
                   {socialPreviews.facebook.title || "No title available"}
                 </div>
-                <div className="text-sm text-gray-600 line-clamp-3">
+                <div className="text-sm text-gray-600 line-clamp-3 break-words">
                   {socialPreviews.facebook.description || "No description available"}
                 </div>
               </div>
@@ -84,9 +86,9 @@ export function SocialPreviewTab({ socialPreviews, url }: SocialPreviewTabProps)
           
           {/* Twitter Preview */}
           <div>
-            <h3 className="text-lg font-medium mb-3">Twitter Preview</h3>
+            <h3 className="text-lg font-semibold mb-3">Twitter Preview</h3>
             <div className="border border-gray-300 rounded-lg overflow-hidden shadow-sm">
-              <div className="h-52 bg-gray-200 flex items-center justify-center">
+              <div className="h-48 bg-gray-200 flex items-center justify-center">
                 {socialPreviews.twitter.image ? (
                   <img 
                     src={socialPreviews.twitter.image} 
@@ -101,11 +103,11 @@ export function SocialPreviewTab({ socialPreviews, url }: SocialPreviewTabProps)
                 )}
               </div>
               <div className="p-3 bg-white">
-                <div className="text-xs text-gray-500 mb-1">{domain}</div>
-                <div className="font-medium text-gray-900 mb-1 line-clamp-2">
+                <div className="text-xs text-gray-500 mb-1 break-words">{domain}</div>
+                <div className="font-medium text-gray-900 mb-1 line-clamp-2 break-words">
                   {socialPreviews.twitter.title || "No title available"}
                 </div>
-                <div className="text-sm text-gray-600 line-clamp-2">
+                <div className="text-sm text-gray-600 line-clamp-2 break-words">
                   {socialPreviews.twitter.description || "No description available"}
                 </div>
               </div>

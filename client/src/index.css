@@ -35,7 +35,7 @@
 
 /* Swiper styles */
 .tab-swiper {
-  @apply w-full;
+  @apply w-full overflow-hidden;
 }
 
 .tab-swiper .swiper-slide {
@@ -43,7 +43,11 @@
 }
 
 .swiper {
-  @apply overflow-visible;
+  @apply overflow-hidden;
+}
+
+body {
+  @apply overflow-x-hidden;
 }
 
 /* Pre and code formatting for mobile */

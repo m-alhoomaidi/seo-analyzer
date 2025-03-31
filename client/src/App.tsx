@@ -17,8 +17,10 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
-      <Toaster />
+      <div className="overflow-x-hidden w-full max-w-[100vw]">
+        <Router />
+        <Toaster />
+      </div>
     </QueryClientProvider>
   );
 }

@@ -34,32 +34,35 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
   }, [activeTab, activeIndex]);
 
   return (
-    <div className="border-b border-gray-200 relative">
-      <Swiper
-        ref={swiperRef}
-        slidesPerView="auto"
-        spaceBetween={0}
-        initialSlide={activeIndex}
-        centerInsufficientSlides={true}
-        className="tab-swiper"
-      >
-        {tabs.map((tab) => (
-          <SwiperSlide key={tab.id} className="w-auto">
-            <button
-              className={cn(
-                "whitespace-nowrap py-4 px-5 border-b-2 font-medium text-sm transition-all duration-200",
-                activeTab === tab.id
-                  ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              )}
-              onClick={() => onTabChange(tab.id)}
-              aria-current={activeTab === tab.id ? "page" : undefined}
-            >
-              {tab.label}
-            </button>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+    <div className="border-b border-gray-200 relative overflow-hidden">
+      <div className="container mx-auto px-3 md:px-6">
+        <Swiper
+          ref={swiperRef}
+          slidesPerView="auto"
+          spaceBetween={0}
+          initialSlide={activeIndex}
+          centerInsufficientSlides={true}
+          className="tab-swiper"
+          freeMode={true}
+        >
+          {tabs.map((tab) => (
+            <SwiperSlide key={tab.id} className="w-auto">
+              <button
+                className={cn(
+                  "whitespace-nowrap py-4 px-3 md:px-4 border-b-2 font-medium text-sm transition-all duration-200",
+                  activeTab === tab.id
+                    ? "border-primary text-primary"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                )}
+                onClick={() => onTabChange(tab.id)}
+                aria-current={activeTab === tab.id ? "page" : undefined}
+              >
+                {tab.label}
+              </button>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
     </div>
   );
 }
